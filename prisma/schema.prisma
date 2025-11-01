@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Dosen {
+  nidn            String   @id
+  nama            String
+  bidang_keahlian String?  
+  email           String?  
+}
+
+model Mahasiswa {
+  nim       String   @id
+  nama      String
+  prodi     String?
+  angkatan  Int?
+
+  
+  nilai     Nilai[]
+}
+
+model MataKuliah {
+  kode_mk   String   @id
+  nama_mk   String
+  sks       Int
+  semester  Int
+
+  nilai     Nilai[]
+}
+
+model Nilai {
+  id_nilai  Int        @id @default(autoincrement())
+  nilai     String
+
+  nim       String
+  kode_mk   String
+
+  mahasiswa Mahasiswa  @relation(fields: [nim], references: [nim])
+  mataKuliah MataKuliah @relation(fields: [kode_mk], references: [kode_mk])
+}
+
+model Admin {
+  id_admin  String   @id
+  nama      String
+  password  String
+}

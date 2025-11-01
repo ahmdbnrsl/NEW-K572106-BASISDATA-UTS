@@ -1,6 +1,23 @@
+'use client';
+
 import { Book, IdCard, Users } from 'lucide-react';
+import * as React from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Dashboard() {
+	const path = usePathname();
+	const [count, setCount] = React.useState<{
+		totalMahasiswa: number;
+		totalDosen: number;
+		totalMataKuliah: number;
+	} | null>(null);
+
+	React.useEffect(() => {
+		fetch('/api/dashboard')
+			.then((res) => res.json())
+			.then((data) => setCount(data));
+	}, [path]);
+
 	return (
 		<div className="w-full flex p-5 flex-col overflow-auto">
 			<h1 className="mt-8 text-3xl font-semibold text-zinc-800">
@@ -19,7 +36,9 @@ export default function Dashboard() {
 						<h1 className="text-lg font-medium text-zinc-500">
 							Total Mahasiswa
 						</h1>
-						<p className="text-zinc-800 font-bold text-2xl">100</p>
+						<p className="text-zinc-800 font-bold text-2xl">
+							{count?.totalMahasiswa || 0}
+						</p>
 					</div>
 				</div>
 				<div className="w-full flex px-6 py-8 items-center gap-3 bg-zinc-100 rounded-md shadow-xl shadow-zinc-200 border border-zinc-300">
@@ -34,7 +53,9 @@ export default function Dashboard() {
 						<h1 className="text-lg font-medium text-zinc-500">
 							Total Dosen
 						</h1>
-						<p className="text-zinc-800 font-bold text-2xl">100</p>
+						<p className="text-zinc-800 font-bold text-2xl">
+							{count?.totalDosen || 0}
+						</p>
 					</div>
 				</div>
 				<div className="w-full flex px-6 py-8 items-center gap-3 bg-zinc-100 rounded-md shadow-xl shadow-zinc-200 border border-zinc-300">
@@ -49,7 +70,9 @@ export default function Dashboard() {
 						<h1 className="text-lg font-medium text-zinc-500">
 							Total Mata Kuliah
 						</h1>
-						<p className="text-zinc-800 font-bold text-2xl">100</p>
+						<p className="text-zinc-800 font-bold text-2xl">
+							{count?.totalMataKuliah || 0}
+						</p>
 					</div>
 				</div>
 			</div>

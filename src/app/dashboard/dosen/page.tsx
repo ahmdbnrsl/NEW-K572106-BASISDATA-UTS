@@ -3,17 +3,22 @@ import { Button } from '@/components/ui/button';
 import { Pen, Plus, Trash } from 'lucide-react';
 import { ReasponsiveTable } from '@/components/ui/responsive_table';
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 const headers = ['NIDN', 'Nama', 'Bidang Keahlian', 'Email', 'Aksi'];
 
 export default function Dosen() {
 	const [data, setData] = useState<any>([]);
+	const pathname = usePathname();
 
 	useEffect(() => {
-		setData([
-			['123', 'Nama Dosen', 'Teknik Informatika', 'dosen@univ.ac.id'],
-		]);
-	}, []);
+		fetch('/api/dosen/get', { method: 'GET' })
+			.then((res) => res.json())
+			.then((data) => {
+				const result = data.map((obj: any) => Object.values(obj));
+				setData(result);
+			});
+	}, [pathname]);
 
 	return (
 		<div className="w-full flex p-5 flex-col overflow-auto">

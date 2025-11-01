@@ -3,15 +3,21 @@ import { Button } from '@/components/ui/button';
 import { Pen, Plus, Trash } from 'lucide-react';
 import { ReasponsiveTable } from '@/components/ui/responsive_table';
 import { useEffect, useState } from 'react';
-
+import { usePathname } from 'next/navigation';
 const headers = ['NIM', 'Nama', 'Prodi', 'Angkatan', 'Aksi'];
 
 export default function Mahasiswa() {
 	const [data, setData] = useState<any>([]);
+	const pathname = usePathname();
 
 	useEffect(() => {
-		setData([['123', 'Nama Mahasiswa', 'Teknik Informatika', '2020']]);
-	}, []);
+		fetch('/api/mahasiswa/get', { method: 'GET' })
+			.then((res) => res.json())
+			.then((data) => {
+				const result = data.map((obj: any) => Object.values(obj));
+				setData(result);
+			});
+	}, [pathname]);
 
 	return (
 		<div className="w-full flex p-5 flex-col overflow-auto">

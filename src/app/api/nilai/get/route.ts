@@ -3,9 +3,24 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
 	try {
-		const nilai = await prisma.nilai.findMany();
+		const nilai = await prisma.nilai.findMany({
+			include: {
+				mahasiswa: {
+					select: { nama: true },
+				},
+				mataKuliah: {
+					select: { nama_mk: true },
+				},
+			},
+		});
 
-		return NextResponse.json(nilai, { status: 201 });
+		const hasil = nilai.map((n) => ({
+			nama: n.mahasiswa.nama,
+			mata_kuliah: n.mataKuliah.nama_mk,
+			nilai: n.nilai,
+		}));
+
+		return NextResponse.json(hasil, { status: 201 });
 	} catch (error) {
 		console.error(error);
 		return NextResponse.json(

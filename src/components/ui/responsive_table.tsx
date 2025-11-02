@@ -28,6 +28,9 @@ import {
 } from 'lucide-react';
 import { Button } from './button';
 import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useDataState } from '@/lib/zustand';
 
 export const ReasponsiveTable = ({
 	headers,
@@ -40,6 +43,8 @@ export const ReasponsiveTable = ({
 	handleDelete: any;
 	// handleEdit: any;
 }) => {
+	const pathname = usePathname();
+	const { setData } = useDataState();
 	return (
 		<div className="overflow-x-auto mt-8 bg-zinc-100 rounded-md p-5 border border-zinc-300">
 			<table className="rounded-md min-w-full divide-y divide-zinc-200 bg-zinc-100">
@@ -69,9 +74,15 @@ export const ReasponsiveTable = ({
 									</td>
 								))}
 								<td className="px-4 py-3 text-base font-semibold flex items-center gap-1">
-									<Button className="bg-sky-800 w-fit h-fit rounded-md hover:bg-sky-700 active:bg-sky-700 focus:bg-sky-700 cursor-pointer">
-										<Pen />
-									</Button>
+									<Link
+										onClick={() => {
+											setData(items);
+										}}
+										href={`${pathname}/edit`}
+										className="bg-sky-800 w-fit h-fit rounded-md hover:bg-sky-700 active:bg-sky-700 focus:bg-sky-700 cursor-pointer text-zinc-100 p-1.5"
+									>
+										<Pen width={20} height={20} />
+									</Link>
 
 									<AlertDialog>
 										<AlertDialogTrigger asChild>

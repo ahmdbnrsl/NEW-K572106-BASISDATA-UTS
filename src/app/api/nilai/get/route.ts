@@ -15,6 +15,7 @@ export async function GET() {
 		});
 
 		const hasil = nilai.map((n) => ({
+			id_nilai: n.id_nilai,
 			nama: n.mahasiswa.nama,
 			mata_kuliah: n.mataKuliah.nama_mk,
 			nilai: n.nilai,

@@ -4,13 +4,18 @@ import { Pen, Plus, Trash } from 'lucide-react';
 import { ReasponsiveTable } from '@/components/ui/responsive_table';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import * as React from 'react';
 import Link from 'next/link';
 
-const headers = ['Nama Mahasiswa', 'Mata Kuliah', 'Nilai', 'Aksi'];
+const headers = ['ID Nilai', 'Nama Mahasiswa', 'Mata Kuliah', 'Nilai', 'Aksi'];
 
 export default function Dosen() {
 	const [data, setData] = useState<any>([]);
 	const pathname = usePathname();
+
+	const router = useRouter();
+	const trigger = React.useRef<number>(0);
 
 	useEffect(() => {
 		fetch('/api/nilai/get', { method: 'GET' })
@@ -19,7 +24,33 @@ export default function Dosen() {
 				const result = data.map((obj: any) => Object.values(obj));
 				setData(result);
 			});
-	}, [pathname]);
+	}, [pathname, trigger.current]);
+
+	const fetchDeleteData = async (id_nilai: string) => {
+		const response = await fetch(`/api/nilai/delete/`, {
+			method: 'DELETE',
+			body: JSON.stringify({ id_nilai }),
+		});
+		if (response.ok) {
+			alert('Data berhasil dihapus');
+			trigger.current += 1;
+			document.getElementById('close_btn')?.click();
+			router.refresh();
+		} else {
+			alert('Terjadi kesalahan saat menghapus data');
+			console.error('Terjadi kesalahan saat menghapus data');
+			document.getElementById('close_btn')?.click();
+		}
+	};
+
+	const handleDelete = (
+		e: React.MouseEvent<HTMLButtonElement>,
+		items: any
+	) => {
+		e.preventDefault();
+		fetchDeleteData(items[0]);
+	};
+
 	return (
 		<div className="w-full flex p-5 flex-col overflow-auto max-h-screen">
 			<div className="mt-8 w-full flex-col flex md:flex-row md:justify-between">
@@ -33,20 +64,11 @@ export default function Dosen() {
 					<Plus /> Tambah Nilai
 				</Link>
 			</div>
-			<ReasponsiveTable headers={headers} data={data}>
-				<Button
-					type="button"
-					className="bg-transparent border-0 focus:bg-transparent active:bg-transparent hover:bg-transparent w-auto z-3 text-sky-800 cursor-pointer"
-				>
-					<Pen width={60} height={60} />
-				</Button>
-				<Button
-					type="button"
-					className="bg-transparent border-0 focus:bg-transparent active:bg-transparent hover:bg-transparent w-auto z-3 text-red-500 cursor-pointer"
-				>
-					<Trash width={60} height={60} />
-				</Button>
-			</ReasponsiveTable>
+			<ReasponsiveTable
+				handleDelete={handleDelete}
+				headers={headers}
+				data={data}
+			></ReasponsiveTable>
 		</div>
 	);
 }

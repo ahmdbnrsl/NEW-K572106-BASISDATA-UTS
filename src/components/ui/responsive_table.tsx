@@ -1,3 +1,21 @@
+'use client';
+
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+	ChevronsUpDown,
+	GripVertical,
+	Pen,
+	SquareArrowDown,
+	Trash,
+} from 'lucide-react';
+
 export const ReasponsiveTable = ({
 	headers,
 	data,
@@ -25,7 +43,7 @@ export const ReasponsiveTable = ({
 			<tbody className="divide-y divide-zinc-100">
 				{data &&
 					data.map((items: any, index: number) => (
-						<tr key={index} className="hover:bg-zinc-300">
+						<tr key={index} className="hover:bg-sky-100">
 							{items.map((item: any, idx: number) => (
 								<td
 									key={idx}
@@ -35,12 +53,37 @@ export const ReasponsiveTable = ({
 								</td>
 							))}
 							<td className="px-4 py-3 text-base font-semibold">
-								{children}
+								<DropdownMenu>
+									<DropdownMenuTrigger className="cursor-pointer bg-zinc-200 p-0.5 rounded-md">
+										<ChevronsUpDown
+											className="text-sky-800"
+											width={20}
+											height={20}
+										/>
+									</DropdownMenuTrigger>
+									<DropdownMenuContent>
+										<DropdownMenuLabel className="w-full text-center font-semibold text-base">
+											Aksi
+										</DropdownMenuLabel>
+										<DropdownMenuSeparator />
+										<DropdownMenuItem className="flex items-center gap-2 w-full justify-center">
+											<Pen width={20} height={20} /> Edit
+										</DropdownMenuItem>
+										<DropdownMenuItem className="flex items-center gap-2 text-red-500 w-full justify-center">
+											<Trash
+												className="text-red-500"
+												width={20}
+												height={20}
+											/>{' '}
+											Hapus
+										</DropdownMenuItem>
+									</DropdownMenuContent>
+								</DropdownMenu>
 							</td>
 						</tr>
 					))}
 				{data.length === 0 && (
-					<tr className="hover:bg-zinc-300">
+					<tr>
 						<td className="px-4 py-3 text-base font-semibold text-zinc-500">
 							Tidak ada data
 						</td>

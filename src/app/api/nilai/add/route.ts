@@ -7,7 +7,6 @@ export async function POST(req: Request) {
 
 		const nilai = await prisma.nilai.create({
 			data: {
-				id_nilai: body.id_nilai,
 				nilai: body.nilai,
 				nim: body.nim,
 				kode_mk: body.kode_mk,

@@ -8,6 +8,8 @@ export async function middleware(request: NextRequest) {
 		secret: process.env.SECRET_TOKEN,
 	});
 
+	console.log(session)
+
 	const { pathname } = request.nextUrl;
 
 	if (pathname === '/') {

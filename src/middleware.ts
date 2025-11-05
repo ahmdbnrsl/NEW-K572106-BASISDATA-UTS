@@ -6,6 +6,7 @@ export async function middleware(request: NextRequest) {
 	const session = await getToken({
 		req: request,
 		secret: process.env.SECRET_TOKEN,
+		secureCookie: process.env.NODE_ENV === 'production'
 	});
 
 	console.log(session)
